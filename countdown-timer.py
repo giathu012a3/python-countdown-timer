@@ -19,6 +19,7 @@ minutes = 0
 seconds = 0
 
 running = True
+counting =True
 
 plus_min_rect = pygame.Rect(80, 60, 60, 60)
 minus_min_rect = pygame.Rect(180, 60, 60, 60)
