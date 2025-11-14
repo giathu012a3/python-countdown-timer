@@ -19,6 +19,8 @@ minutes = 0
 seconds = 0
 
 running = True
+counting =False
+timer_ms = 0 
 
 plus_min_rect = pygame.Rect(80, 60, 60, 60)
 minus_min_rect = pygame.Rect(180, 60, 60, 60)
@@ -39,7 +41,11 @@ while running:
 
     screen.blit(font.render('+', True, BLACK), (100, 70))
     screen.blit(font.render('-', True, BLACK), (200, 70))
-    screen.blit(font.render('Start', True, BLACK), (320, 75))
+    if counting:
+        pygame.draw.rect(screen, (255,0,0), start_rect, border_radius=12)
+        screen.blit(font.render('Stop', True, BLACK), (320, 75))
+    else:
+        screen.blit(font.render('Start', True, BLACK), (320, 75))
     screen.blit(font.render('+', True, BLACK), (100, 170))
     screen.blit(font.render('-', True, BLACK), (200, 170))
     screen.blit(font.render('Reset', True, BLACK), (315, 175))
@@ -71,6 +77,25 @@ while running:
                     seconds = 59
                 else:
                     seconds = (seconds - 1) % 60
+            elif start_rect.collidepoint(event.pos):
+                counting= not counting
+            elif reset_rect.collidepoint(event.pos):
+                seconds =0
+                minutes =0
+                counting = False
+                timer_ms = 0
+    if counting:
+        timer_ms += pygame.time.Clock().tick(30)
+        if timer_ms >=1000:
+            timer_ms=0
+            if seconds == 0 :
+                if minutes == 0:
+                    counting = False
+                else: 
+                    minutes -=1
+                    seconds =59
+            else:
+                seconds -=1
 
     pygame.display.flip()
 
