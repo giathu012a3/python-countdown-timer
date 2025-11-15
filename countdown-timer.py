@@ -1,4 +1,5 @@
 import pygame
+import math
 
 pygame.init()
 font = pygame.font.Font(None, 40)
@@ -52,7 +53,15 @@ while running:
 
     pygame.draw.circle(screen, WHITE, center, radius)
     pygame.draw.circle(screen, BLACK, center, radius, 3)
-    pygame.draw.line(screen, BLACK, center, (250, 270), 4)
+    # pygame.draw.line(screen, BLACK, center, (250, 270), 4)
+    angle = seconds * 6
+
+    hand_length = 110
+
+    end_x = center[0] + hand_length * math.sin(math.radians(angle))
+    end_y = center[1] - hand_length * math.cos(math.radians(angle))
+    pygame.draw.line(screen, BLACK, center, (end_x, end_y), 4)
+
 
     time_text = font_big.render(f"{minutes:02d}:{seconds:02d}", True, BLACK)
     screen.blit(time_text, (center[0] - 40, center[1] - 20))
