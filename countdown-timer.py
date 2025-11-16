@@ -18,6 +18,7 @@ radius = 120
 
 minutes = 0
 seconds = 0
+initial_total_seconds = 0
 
 running = True
 counting =False
@@ -69,6 +70,19 @@ while running:
     pygame.draw.rect(screen, BLACK, (50, 520, 400, 50), border_radius=10)
     pygame.draw.rect(screen, WHITE, (60, 530, 380, 30), border_radius=10)
 
+    total_seconds = minutes * 60 + seconds
+    if initial_total_seconds > 0:
+        percent = total_seconds / initial_total_seconds
+    else:
+        percent = 0
+
+    percent = max(0, min(1, percent)) 
+
+    fill_width = int(380 * percent)
+
+    pygame.draw.rect(screen, LIGHT_BLUE, (60, 530, fill_width, 30), border_radius=10)
+
+
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
@@ -88,11 +102,14 @@ while running:
                     seconds = (seconds - 1) % 60
             elif start_rect.collidepoint(event.pos):
                 counting= not counting
+                if counting and initial_total_seconds ==0 :
+                    initial_total_seconds =minutes *60 + seconds
             elif reset_rect.collidepoint(event.pos):
                 seconds =0
                 minutes =0
                 counting = False
                 timer_ms = 0
+                initial_total_seconds = 0
     if counting:
         timer_ms += pygame.time.Clock().tick(30)
         if timer_ms >=1000:
